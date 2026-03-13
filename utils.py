@@ -21,7 +21,7 @@ def save_checkpoint(model, optimizer, epoch, val_acc, save_path):
         'model_state':model.state_dict(),
         'optimizer_state':optimizer.state_dict(),
         'val_acc':val_acc
-    }, f"{save_path}/best_model.pth")
+    }, f"{save_path}/extra_training.pth")
 
 def load_checkpoint(model, optimizer, path):
     checkpoint = torch.load(path)

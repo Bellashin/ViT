@@ -2,7 +2,7 @@ import torch
 from utils import accuracy, save_checkpoint
 
 class Trainer:
-    def __init__(self, model, train_loader, val_loader, optimizer, scheduler, criterion, device, config):
+    def __init__(self, model, train_loader, val_loader, optimizer, scheduler, criterion, device, config, start_epoch=0):
         self.model = model
         self.train_loader = train_loader
         self.val_loader = val_loader
@@ -11,6 +11,7 @@ class Trainer:
         self.criterion = criterion
         self.device = device
         self.config = config # 왜 이게 필요힌지??
+        self.start_epoch = start_epoch
 
     def train_epoch(self):
         self.model.train()
@@ -28,7 +29,6 @@ class Trainer:
             torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=1.0)
 
             self.optimizer.step()
-            self.scheduler.step()
 
             total_loss += loss.item()
             total_acc += accuracy(output, label)
@@ -61,8 +61,10 @@ class Trainer:
         for epoch in range(self.config.epochs):
             train_loss, train_acc = self.train_epoch()
             val_loss, val_acc = self.validate()
+            #self.scheduler.step()
 
-            print(f"Epoch [{epoch+1}/{self.config.epochs}] "
+            print(f"Epoch [{self.start_epoch+epoch+1}/{self.config.epochs}] "
+              f"LR: {self.optimizer.param_groups[0]['lr']:.8f} | "
               f"Train Loss: {train_loss:.4f} | Train Acc: {train_acc:.4f} | "
               f"Val Loss: {val_loss:.4f} | Val Acc: {val_acc:.4f}")
             
