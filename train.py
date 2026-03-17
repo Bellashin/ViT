@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from torch.optim import Adam
+from torch.optim import AdamW
 from torch.optim.lr_scheduler import LinearLR, SequentialLR
 from torchinfo import summary
 
@@ -19,25 +19,25 @@ def main():
     train_loader, val_loader, test_loader, class_idx = get_dataset(
         root=Config.data_root,
         batch_size=Config.batch_size,
-        num_workers = 4
+        num_workers = 2
     )
 
     model= ViT(
         in_channels=Config.in_channels,
         embedded_size=Config.embed_dim,
-        num_encoders=Config.num_enocder,
+        num_encoders=Config.num_encoder,
         patch_size=Config.patch_size,
         num_classes=Config.num_classes,
         num_heads=Config.num_heads,
-        img_size=Config.img_size
+        img_size=Config.img_size,
+        dropout=Config.dropout
     ).to(device)
 
     summary(model, input_size=(1,3,Config.img_size, Config.img_size), device = device)
-
-    optimizer=Adam(
+    #논문에서는 Adam 사용했다
+    optimizer=AdamW(
         model.parameters(),
         lr=Config.lr,
-        betas=(0.9, 0.999),
         weight_decay=Config.weight_decay
     )
 
@@ -45,18 +45,18 @@ def main():
         optimizer,
         start_factor=0.01,
         end_factor=1.0,
-        total_iters=10
+        total_iters=3
     )
     decay_scheduler=LinearLR(
         optimizer,
         start_factor=1.0,
-        end_factor=0.0,
-        total_iters=Config.epochs-10
+        end_factor=0.01,
+        total_iters=Config.epochs-3
     )
     scheduler=SequentialLR(
         optimizer,
         schedulers =[warmup_scheduler, decay_scheduler],
-        milestones=[10]
+        milestones=[3]
     )
 
     criterion = nn.CrossEntropyLoss(label_smoothing=0.1)

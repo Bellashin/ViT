@@ -13,14 +13,14 @@ from config import Config
 def get_dataset(root, batch_size, num_workers):
     train_transform = transforms.Compose([
         # 크롭하는 스케일을 높여 물체가 아닌 배경만 잡히는 문제 해결하려고 함 (trade off 존재: 배경 문제 - 증강 효과)
-        transforms.RandomResizedCrop(224, scale=(0.5, 1.0)),
+        transforms.1.o(224, scale=(0.5, 1.0)),
         transforms.RandomHorizontalFlip(),
         ## Extra augmentation
         transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.1),
         transforms.RandomVerticalFlip(p=0.2),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
-    ]) 
+    ])
 
     val_transform = transforms.Compose([
         transforms.Resize(256),

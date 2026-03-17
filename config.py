@@ -16,8 +16,7 @@ class Config:
     # Model
     embed_dim    = 256
     num_heads    = 8
-    num_encoder   = 6
-    mlp_ratio    = 4
+    num_encoder   = 4
     dropout      = 0.1
     
     # Train
