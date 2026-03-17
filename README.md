@@ -5,7 +5,7 @@ Datasets url : https://www.kaggle.com/datasets/marquis03/plants-classification
 
 Vision Transformer needs LARGE datasets to pre-train, but I use Plants Classification Datasets which contain 30 types of plants images, including 21000 training images, 3000 validation images and 6000 test images, with a total data size of 1.48GB.
 
-
+```
 ViT/
 │
 ├── checkpoints/                 # Saved model checkpoints
@@ -25,7 +25,7 @@ ViT/
 ├── model.py                     # Vision Transformer model
 ├── trainer.py                   # Training logic
 ├── train.py                     # Training entry script
-├── extra_train.py               # Additional training experiments 50 epochs
+├── extra_train.py               # Additional training experiments (extra 50 epochs)
 │
 ├── utils.py                     # Utility functions
 │
@@ -33,3 +33,4 @@ ViT/
 ├── visualize_train_graph.py     # Training curve visualization
 │
 └── README.md                    # Project documentation
+```
